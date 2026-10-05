@@ -6,12 +6,15 @@ export const config = {
   nav: [{ id: 'overview', label: '总览' }, { id: 'documents', label: '证件档案' }, { id: 'history', label: '使用记录' }, { id: 'insurance', label: '家庭保险' }, { id: 'achievements', label: '成就与榜单' }],
   metrics: [
     { label: '证件总数', collection: 'documents', tone: 'green' },
-    { label: '90天内到期', tone: 'peach', value: (s) => s.documents.filter((x) => x.expires && days(x.expires) >= 0 && days(x.expires) <= 90).length },
-    { label: '已过期', tone: 'red', value: (s) => s.documents.filter((x) => x.expires && days(x.expires) < 0).length },
+    { label: '90天内到期', tone: 'peach', value: (s) => [...s.documents, ...s.policies].filter((x) => x.expires && days(x.expires) >= 0 && days(x.expires) <= 90).length },
+    { label: '已过期', tone: 'red', value: (s) => [...s.documents, ...s.policies].filter((x) => x.expires && days(x.expires) < 0).length },
     { label: '外借未还', tone: 'blue', value: (s) => s.usages.filter((x) => x.status === '借用中').length },
   ],
-  form: { title: '新建证件档案', collection: 'documents', fields: [
+  form: { title: '新建证件档案', editTitle: '编辑证件档案', collection: 'documents', fields: [
     ['name', '证件名称', '身份证'], ['category', '类别', '身份类'], ['holder', '持有人', '林小满'], ['number', '证件号码', '110***********'], ['issued', '签发日期', '2023-01-01', 'date'], ['expires', '有效期至', '2033-01-01', 'date'], ['issuer', '发证机关', 'XX市公安局'], ['location', '存放位置', '保险柜'], ['copyLocation', '复印件位置', '云盘 / 家庭共享'], ['notes', '备注', ''],
+  ]},
+  policyForm: { title: '新建保单', editTitle: '编辑保单', collection: 'policies', fields: [
+    ['type', '险种名称', '家庭医疗险'], ['company', '保险公司', '安和保险'], ['number', '保单号码', 'AH-00000'], ['insured', '被保险人', '林家'], ['expires', '保障到期日', '2027-01-01', 'date'], ['amount', '保额（元）', '500000', 'number'], ['premium', '保费（元）', '2890', 'number'], ['payment', '缴费方式', '年缴'], ['description', '保障备注', ''],
   ]},
   categories: ['身份类', '资产类', '合同类', '医疗类', '教育类', '其他'],
   achievements: ['首次建档', '证件齐全', '零过期遗忘', '续办及时', '家庭档案大师', '收纳有序', '安全存档', '保险规划师', '使用有迹', '家庭守护者', '资料无忧', '档案领航员']
